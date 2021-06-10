@@ -1,6 +1,8 @@
 <?php
 namespace Oesteve\Transformer;
 
+use Oesteve\Transformer\Resolver;
+
 interface ResolverLocator
 {
 

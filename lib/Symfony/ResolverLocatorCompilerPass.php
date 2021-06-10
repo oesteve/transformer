@@ -3,8 +3,9 @@
 
 namespace Oesteve\Transformer\Symfony;
 
-use Oesteve\Transformer\InMemory\InMemoryTransformer;
-use Oesteve\Transformer\Resolver;
+use Oesteve\Transformer\ResolverLocator\SymfonyResolverLocator;
+use Oesteve\Transformer\Transformer;
+use Oesteve\Transformer\Resolver\Resolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -32,21 +33,28 @@ class ResolverLocatorCompilerPass implements CompilerPassInterface
         $serviceLocator = ServiceLocatorTagPass::register($container, $resolverMap);
 
         $container->setDefinition(
-            SymfonyHandlerLocator::class,
+            SymfonyResolverLocator::class,
             new Definition(
-                SymfonyHandlerLocator::class,
+                SymfonyResolverLocator::class,
                 [$serviceLocator]
             )
         );
 
+        $this->defineTransformer($container);
+    }
+
+    private function defineTransformer(ContainerBuilder $container): void
+    {
         $transformerDefinition = new Definition(
-            InMemoryTransformer::class,
+            Transformer::class,
             [
-                new Reference(SymfonyHandlerLocator::class)
+                new Reference(SymfonyResolverLocator::class)
             ]);
+        
+        $transformerDefinition->setPublic(true);
 
         $container->setDefinition(
-            InMemoryTransformer::class,
+            Transformer::class,
             $transformerDefinition
         );
     }

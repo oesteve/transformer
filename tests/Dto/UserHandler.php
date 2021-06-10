@@ -3,18 +3,20 @@
 
 namespace Oesteve\Tests\Transformer\Dto;
 
-use Oesteve\Transformer\Resolver;
 
+use Oesteve\Transformer\Resolver;
 
 class UserHandler implements Resolver
 {
 
     public function resolve(array $keys): array
     {
-        return array_map(
-            fn(string $key) => new UserDto($key),
-            $keys
-        );
+        $data = [];
+        foreach ($keys as $key){
+            $data[$key] = new UserDto($key);
+        }
+
+        return $data;
     }
 
     public static function supports(): string

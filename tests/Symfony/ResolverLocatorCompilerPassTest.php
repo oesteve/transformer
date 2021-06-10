@@ -3,9 +3,9 @@
 namespace Oesteve\Tests\Transformer\Symfony;
 
 use Oesteve\Tests\Transformer\Dto\UserHandler;
-use Oesteve\Transformer\InMemory\InMemoryTransformer;
+use Oesteve\Transformer\ResolverLocator\SymfonyResolverLocator;
+use Oesteve\Transformer\Transformer;
 use Oesteve\Transformer\Symfony\ResolverLocatorCompilerPass;
-use Oesteve\Transformer\Symfony\SymfonyHandlerLocator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -25,8 +25,8 @@ class ResolverLocatorCompilerPassTest extends TestCase
         $pass = new ResolverLocatorCompilerPass();
         $pass->process($container);
 
-        self::assertTrue($container->has(SymfonyHandlerLocator::class));
-        $definition = $container->get(SymfonyHandlerLocator::class);
+        self::assertTrue($container->has(SymfonyResolverLocator::class));
+        $definition = $container->getDefinition(SymfonyResolverLocator::class);
 
         $serviceLocatorReference = $definition->getArgument(0);
         $serviceLocatorDefinition = $container->getDefinition($serviceLocatorReference);
@@ -41,6 +41,6 @@ class ResolverLocatorCompilerPassTest extends TestCase
         $pass = new ResolverLocatorCompilerPass();
         $pass->process($container);
 
-        self::assertTrue($container->has(InMemoryTransformer::class));
+        self::assertTrue($container->has(Transformer::class));
     }
 }

@@ -1,10 +1,9 @@
 <?php
 
-namespace Oesteve\Transformer\InMemory;
+namespace Oesteve\Transformer\ResolverLocator;
 
 use Oesteve\Transformer\Resolver;
 use Oesteve\Transformer\ResolverLocator;
-use Oesteve\Transformer\ResolverNotFoundException;
 
 class InMemoryResolverLocator implements ResolverLocator
 {

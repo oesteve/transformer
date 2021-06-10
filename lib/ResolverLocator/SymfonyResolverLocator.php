@@ -1,15 +1,14 @@
 <?php
 
 
-namespace Oesteve\Transformer\Symfony;
+namespace Oesteve\Transformer\ResolverLocator;
 
 
-use Oesteve\Transformer\Resolver;
 use Oesteve\Transformer\ResolverLocator;
-use Oesteve\Transformer\ResolverNotFoundException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use Oesteve\Transformer\Resolver;
 
-class SymfonyHandlerLocator implements ResolverLocator
+class SymfonyResolverLocator implements ResolverLocator
 {
     private ServiceLocator $serviceLocator;
 
@@ -21,7 +20,7 @@ class SymfonyHandlerLocator implements ResolverLocator
     public function locate(string $dtoClassName): Resolver
     {
         if(!$this->serviceLocator->has($dtoClassName)){
-            throw new ResolverNotFoundException("Unable to find key $dtoClassName in ServiceLocator");
+            throw new ResolverNotFoundException("Unable to find resolver for $dtoClassName in ServiceLocator");
         }
 
         return $this->serviceLocator->get($dtoClassName);

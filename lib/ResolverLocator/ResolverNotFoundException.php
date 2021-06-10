@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Oesteve\Transformer;
+namespace Oesteve\Transformer\ResolverLocator;
 
 
 class ResolverNotFoundException extends \Exception
