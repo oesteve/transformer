@@ -41,6 +41,11 @@ class Transformer
      */
     public function transformMany(string $className, array $keys): array
     {
+
+        if(empty($keys)){
+            return [];
+        }
+
         return $this->resolverLocator->locate($className)->resolve($keys);
     }
 

@@ -38,6 +38,15 @@ class TransformerTest extends TestCase
         self::assertEquals(new UserDto('bob'), $user);
     }
 
+    public function testTransformEmptyArray(): void
+    {
+        $locator = new InMemoryResolverLocator();
+        $transformer = new Transformer($locator);
+        $users = $transformer->transformMany(UserDto::class, []);
+
+        self::assertCount(0,$users);
+    }
+
     public function testInvalidHandlerResponse():void
     {
         $resolverLocator = new InMemoryResolverLocator();
