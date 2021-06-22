@@ -26,7 +26,7 @@ class Transformer
         $res = $this->transformMany($className, [$key]);
 
         if(!isset($res[$key])){
-            throw new InvalidResolverResponseException("Missing key $key in resolver return data");
+            throw new InvalidResolverResponseException("Missing key $key in resolver return data for type $className");
         }
 
         return $res[$key];
