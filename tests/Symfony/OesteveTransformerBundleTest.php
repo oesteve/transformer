@@ -11,16 +11,13 @@ class OesteveTransformerBundleTest extends TestCase
 {
     public function testCompilerPassAdded(): void
     {
-
         $container = new ContainerBuilder();
         $bundle = new OesteveTransformerBundle();
 
         $bundle->build($container);
 
         $compilerPasses = $container->getCompilerPassConfig()->getPasses();
-        $compilerPassClasses = array_map(fn(mixed $class) => $class::class, $compilerPasses);
+        $compilerPassClasses = array_map(fn (mixed $class) => $class::class, $compilerPasses);
         self::assertContains(ResolverLocatorCompilerPass::class, $compilerPassClasses);
-
     }
-
 }

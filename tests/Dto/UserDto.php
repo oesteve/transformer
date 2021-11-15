@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Oesteve\Tests\Transformer\Dto;
-
 
 class UserDto
 {

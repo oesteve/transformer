@@ -1,11 +1,11 @@
 <?php
 
-
 namespace Oesteve\Transformer\Symfony;
 
+use Oesteve\Transformer\Middleware\ResolverMiddleware;
 use Oesteve\Transformer\ResolverLocator\SymfonyResolverLocator;
 use Oesteve\Transformer\Transformer;
-use Oesteve\Transformer\Resolver\Resolver;
+use Oesteve\Transformer\Resolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,7 +18,33 @@ class ResolverLocatorCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
+        $this->defineResolverLocator($container);
+        $this->defineResolverMiddleware($container);
+        $this->defineTransformer($container);
+    }
 
+    private function defineTransformer(ContainerBuilder $container): void
+    {
+        $transformerDefinition = new Definition(
+            Transformer::class,
+            [
+                new Reference(ResolverMiddleware::class)
+            ]
+        );
+
+        $transformerDefinition->setPublic(true);
+
+        $container->setDefinition(
+            Transformer::class,
+            $transformerDefinition
+        );
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function defineResolverLocator(ContainerBuilder $container): void
+    {
         $resolverMap = [];
 
         /**
@@ -39,23 +65,17 @@ class ResolverLocatorCompilerPass implements CompilerPassInterface
                 [$serviceLocator]
             )
         );
-
-        $this->defineTransformer($container);
     }
 
-    private function defineTransformer(ContainerBuilder $container): void
+    private function defineResolverMiddleware(ContainerBuilder $container): void
     {
-        $transformerDefinition = new Definition(
-            Transformer::class,
-            [
-                new Reference(SymfonyResolverLocator::class)
-            ]);
-        
-        $transformerDefinition->setPublic(true);
-
+        $resolverLocator = new Reference(SymfonyResolverLocator::class);
         $container->setDefinition(
-            Transformer::class,
-            $transformerDefinition
+            ResolverMiddleware::class,
+            new Definition(
+                ResolverMiddleware::class,
+                [$resolverLocator]
+            )
         );
     }
 }

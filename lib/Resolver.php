@@ -1,4 +1,5 @@
 <?php
+
 namespace Oesteve\Transformer;
 
 /**
@@ -7,10 +8,9 @@ namespace Oesteve\Transformer;
 interface Resolver
 {
     /**
-     * @param array<string> $keys
-     * @return array<string, T>
+     * @param Collection<T> $items
      */
-    public function resolve(array $keys): array;
+    public function resolve(Collection $items): void;
 
     /**
      * @return class-string<T>
