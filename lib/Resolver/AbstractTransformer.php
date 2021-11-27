@@ -10,17 +10,17 @@ use Oesteve\Transformer\Resolver;
  */
 abstract class AbstractTransformer implements Resolver
 {
-
     /**
      * @return T
      */
     protected function transform(string $key): mixed
     {
-        throw new InvalidTransformerException("Resolve method not implemented in ".static::class);
+        throw new InvalidTransformerException('Resolve method not implemented in '.static::class);
     }
 
     /**
      * @param array<string> $keys
+     *
      * @return array<T>
      */
     protected function transformMany(array $keys): array
@@ -30,14 +30,15 @@ abstract class AbstractTransformer implements Resolver
 
     /**
      * @param array<string> $keys
+     *
      * @return array<string, T>
      */
     public function resolve(array $keys): array
     {
         $result = $this->transformMany($keys);
 
-        if(count($result) === 0){
-            foreach ($keys as $key){
+        if (0 === count($result)) {
+            foreach ($keys as $key) {
                 $result[$key] = $this->transform($key);
             }
         }

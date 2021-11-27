@@ -12,8 +12,7 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 
 class SymfonyResolverLocatorTest extends TestCase
 {
-
-    public function testHandlerNotFoundError():void
+    public function testHandlerNotFoundError(): void
     {
         $locator = new SymfonyResolverLocator(new ServiceLocator([]));
         $transformer = new Transformer($locator);
@@ -24,14 +23,13 @@ class SymfonyResolverLocatorTest extends TestCase
         $transformer->transform(UserDto::class, 'my-user');
     }
 
-    public function testHandlerLocator():void
+    public function testHandlerLocator(): void
     {
         $factories = [
-            'Oesteve\Tests\Transformer\Dto\UserDto' => fn() => new UserHandler()
+            'Oesteve\Tests\Transformer\Dto\UserDto' => fn () => new UserHandler(),
         ];
         $locator = new SymfonyResolverLocator(new ServiceLocator($factories));
         $transformer = new Transformer($locator);
-
 
         $dto = $transformer->transform(UserDto::class, 'my-user');
 

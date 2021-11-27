@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Oesteve\Transformer\Symfony;
 
+use Oesteve\Transformer\Resolver\Resolver;
 use Oesteve\Transformer\ResolverLocator\SymfonyResolverLocator;
 use Oesteve\Transformer\Transformer;
-use Oesteve\Transformer\Resolver\Resolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,12 +17,11 @@ class ResolverLocatorCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-
         $resolverMap = [];
 
         /**
          * @var class-string<Resolver<mixed>> $id
-         * @var array<string,mixed> $attributes
+         * @var array<string,mixed>           $attributes
          */
         foreach ($container->findTaggedServiceIds(self::RESOLVER_TAG) as $id => $attributes) {
             $dtoClassName = $id::supports();
@@ -48,9 +46,9 @@ class ResolverLocatorCompilerPass implements CompilerPassInterface
         $transformerDefinition = new Definition(
             Transformer::class,
             [
-                new Reference(SymfonyResolverLocator::class)
+                new Reference(SymfonyResolverLocator::class),
             ]);
-        
+
         $transformerDefinition->setPublic(true);
 
         $container->setDefinition(

@@ -7,7 +7,6 @@ use Oesteve\Transformer\ResolverLocator;
 
 class InMemoryResolverLocator implements ResolverLocator
 {
-
     /** @var array<string,Resolver<mixed>> */
     private array $handlers = [];
 
@@ -21,8 +20,8 @@ class InMemoryResolverLocator implements ResolverLocator
 
     public function locate(string $dtoClassName): Resolver
     {
-        if(!isset($this->handlers[$dtoClassName])){
-            throw new ResolverNotFoundException("Resolver not found for class ".$dtoClassName);
+        if (!isset($this->handlers[$dtoClassName])) {
+            throw new ResolverNotFoundException('Resolver not found for class '.$dtoClassName);
         }
 
         return $this->handlers[$dtoClassName];

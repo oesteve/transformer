@@ -2,3 +2,4 @@
 vendor
 .phpunit.result.*
 tests/var
+.php-cs-fixer.cache

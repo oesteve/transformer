@@ -4,8 +4,8 @@ namespace Oesteve\Tests\Transformer\Transformer;
 
 use Oesteve\Tests\Transformer\Dto\UserDto;
 use Oesteve\Tests\Transformer\Dto\UserHandler;
-use Oesteve\Transformer\Resolver\InvalidResolverResponseException;
 use Oesteve\Transformer\Resolver;
+use Oesteve\Transformer\Resolver\InvalidResolverResponseException;
 use Oesteve\Transformer\ResolverLocator\InMemoryResolverLocator;
 use Oesteve\Transformer\ResolverLocator\ResolverNotFoundException;
 use Oesteve\Transformer\Transformer;
@@ -16,7 +16,6 @@ class TransformerTest extends TestCase
     public function testHandlerNotFoundException(): void
     {
         $transformer = new Transformer(new InMemoryResolverLocator());
-
 
         $this->expectException(ResolverNotFoundException::class);
         $this->expectExceptionMessage("Resolver not found for class Oesteve\Tests\Transformer\Dto\UserDto");
@@ -31,7 +30,6 @@ class TransformerTest extends TestCase
 
         $locator->set(new UserHandler());
 
-
         $user = $transformer->transform(UserDto::class, 'bob');
 
         self::assertNotNull($user);
@@ -44,10 +42,10 @@ class TransformerTest extends TestCase
         $transformer = new Transformer($locator);
         $users = $transformer->transformMany(UserDto::class, []);
 
-        self::assertCount(0,$users);
+        self::assertCount(0, $users);
     }
 
-    public function testInvalidHandlerResponse():void
+    public function testInvalidHandlerResponse(): void
     {
         $resolverLocator = new InMemoryResolverLocator();
         $resolverLocator->set(new EmptyResponseResolver());
@@ -55,16 +53,14 @@ class TransformerTest extends TestCase
         $transformer = new Transformer($resolverLocator);
 
         $this->expectException(InvalidResolverResponseException::class);
-        $this->expectExceptionMessage("Missing key my-user-key in resolver return data");
+        $this->expectExceptionMessage('Missing key my-user-key in resolver return data');
 
         $transformer->transform(UserDto::class, 'my-user-key');
-
     }
-
 }
 
-class EmptyResponseResolver implements Resolver {
-
+class EmptyResponseResolver implements Resolver
+{
     public function resolve(array $keys): array
     {
         return [];

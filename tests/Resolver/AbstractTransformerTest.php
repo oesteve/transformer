@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractTransformerTest extends TestCase
 {
-
     public function testUnImplementedTransformer(): void
     {
         $resolverLocator = new InMemoryResolverLocator();
@@ -21,7 +20,6 @@ class AbstractTransformerTest extends TestCase
         $this->expectException(InvalidTransformerException::class);
         $this->expectExceptionMessage("Resolve method not implemented in Oesteve\Tests\Transformer\Resolver\UnImplementedTransformer");
         $transformer->transform(UserDto::class, 'bob');
-
     }
 
     public function testTransformMany(): void
@@ -43,24 +41,23 @@ class AbstractTransformerTest extends TestCase
         $user = $transformer->transform(UserDto::class, 'bob');
         $this->assertEquals('bob', $user->name);
     }
-
 }
 
-
-class UnImplementedTransformer extends AbstractTransformer {
-
+class UnImplementedTransformer extends AbstractTransformer
+{
     public static function supports(): string
     {
         return UserDto::class;
     }
 }
 
-class ManyTransformer extends AbstractTransformer {
-
+class ManyTransformer extends AbstractTransformer
+{
     protected function transformMany(array $keys): array
     {
         $key = $keys[0];
-        return [ $key => new UserDto($key) ];
+
+        return [$key => new UserDto($key)];
     }
 
     public static function supports(): string
@@ -68,8 +65,8 @@ class ManyTransformer extends AbstractTransformer {
         return UserDto::class;
     }
 }
-class SingleTransformer extends AbstractTransformer {
-
+class SingleTransformer extends AbstractTransformer
+{
     protected function transform(string $key): UserDto
     {
         return new UserDto($key);

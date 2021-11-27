@@ -4,15 +4,14 @@ namespace Oesteve\Tests\Transformer\Symfony;
 
 use Oesteve\Tests\Transformer\Dto\UserHandler;
 use Oesteve\Transformer\ResolverLocator\SymfonyResolverLocator;
-use Oesteve\Transformer\Transformer;
 use Oesteve\Transformer\Symfony\ResolverLocatorCompilerPass;
+use Oesteve\Transformer\Transformer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 class ResolverLocatorCompilerPassTest extends TestCase
 {
-
     public function testProcess(): void
     {
         $container = new ContainerBuilder();
@@ -20,7 +19,7 @@ class ResolverLocatorCompilerPassTest extends TestCase
         $service = new Definition(UserHandler::class);
         $service->addTag(ResolverLocatorCompilerPass::RESOLVER_TAG);
 
-        $container->addDefinitions([ UserHandler::class => $service]);
+        $container->addDefinitions([UserHandler::class => $service]);
 
         $pass = new ResolverLocatorCompilerPass();
         $pass->process($container);
@@ -31,9 +30,9 @@ class ResolverLocatorCompilerPassTest extends TestCase
         $serviceLocatorReference = $definition->getArgument(0);
         $serviceLocatorDefinition = $container->getDefinition($serviceLocatorReference);
 
-        self::assertCount(1, $serviceLocatorDefinition->getArguments() );
-
+        self::assertCount(1, $serviceLocatorDefinition->getArguments());
     }
+
     public function testTransformerDefinition(): void
     {
         $container = new ContainerBuilder();
