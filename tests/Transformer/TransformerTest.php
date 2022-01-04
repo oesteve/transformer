@@ -66,7 +66,7 @@ class TransformerTest extends TestCase
 
         $res = $transformer->transformMany(UserDto::class, [new Stringeable(1)]);
         $this->assertCount(1, $res);
-        $this->assertEquals('1', $res['1']->name);
+        $this->assertEquals('1', $res[0]->name);
     }
 }
 
