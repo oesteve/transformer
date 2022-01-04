@@ -57,6 +57,17 @@ class TransformerTest extends TestCase
 
         $transformer->transform(UserDto::class, 'my-user-key');
     }
+
+    public function testStringeable(): void
+    {
+        $locator = new InMemoryResolverLocator();
+        $transformer = new Transformer($locator);
+        $locator->set(new UserHandler());
+
+        $res = $transformer->transformMany(UserDto::class, [new Stringeable(1)]);
+        $this->assertCount(1, $res);
+        $this->assertEquals('1', $res['1']->name);
+    }
 }
 
 class EmptyResponseResolver implements Resolver
@@ -69,5 +80,20 @@ class EmptyResponseResolver implements Resolver
     public static function supports(): string
     {
         return UserDto::class;
+    }
+}
+
+class Stringeable
+{
+    private int $id;
+
+    public function __construct(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->id;
     }
 }

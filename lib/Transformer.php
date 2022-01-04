@@ -37,7 +37,7 @@ class Transformer
      * @template T
      *
      * @param class-string<T> $className
-     * @param array<string>   $keys
+     * @param array<mixed>    $keys
      *
      * @return array<T>
      */
@@ -46,6 +46,14 @@ class Transformer
         if (empty($keys)) {
             return [];
         }
+
+        $keys = array_map(function (mixed $key) {
+            if (is_string($key)) {
+                return $key;
+            }
+
+            return (string) $key;
+        }, $keys);
 
         return $this->resolverLocator->locate($className)->resolve($keys);
     }
