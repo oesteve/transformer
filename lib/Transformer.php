@@ -3,6 +3,8 @@
 namespace Oesteve\Transformer;
 
 use Oesteve\Transformer\Resolver\InvalidResolverResponseException;
+use Oesteve\Transformer\Resolver\InvalidTransformerException;
+use Oesteve\Transformer\Resolver\ResolverException;
 
 class Transformer
 {
@@ -43,6 +45,8 @@ class Transformer
      * @param array<string>   $options
      *
      * @return array<T>
+     *
+     * @throws ResolverException<T>|InvalidTransformerException
      */
     public function transformMany(string $className, array $keys, array $options = []): array
     {
@@ -58,12 +62,30 @@ class Transformer
             return (string) $key;
         }, $keys);
 
-        $res = $this->resolverLocator->locate($className)->resolve($keys);
+        $results = $this->resolverLocator->locate($className)->resolve($keys);
 
-        if (in_array(self::OPTION_RESULT_ASSOC, $options)) {
-            return $res;
+        $throws = [];
+        foreach ($results as $key => $result) {
+            if (is_callable($result)) {
+                try {
+                    $results[$key] = $result($key);
+                } catch (InvalidTransformerException $invalidTransformerException) {
+                    throw $invalidTransformerException;
+                } catch (\Throwable $error) {
+                    unset($results[$key]);
+                    $throws[$key] = $error;
+                }
+            }
         }
 
-        return array_values($res);
+        if ([] !== $throws) {
+            throw new ResolverException($throws, $results);
+        }
+
+        if (in_array(self::OPTION_RESULT_ASSOC, $options)) {
+            return $results;
+        }
+
+        return array_values($results);
     }
 }
