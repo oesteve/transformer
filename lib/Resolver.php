@@ -10,7 +10,7 @@ interface Resolver
     /**
      * @param array<string> $keys
      *
-     * @return array<string, T>
+     * @return array<string,T|\Closure>
      */
     public function resolve(array $keys): array;
 

@@ -21,7 +21,7 @@ abstract class AbstractTransformer implements Resolver
     /**
      * @param array<string> $keys
      *
-     * @return array<T>
+     * @return array<string, T | \Closure(string):T>
      */
     protected function transformMany(array $keys): array
     {
@@ -31,7 +31,7 @@ abstract class AbstractTransformer implements Resolver
     /**
      * @param array<string> $keys
      *
-     * @return array<string, T>
+     * @return array<string, T | \Closure(string):T>
      */
     public function resolve(array $keys): array
     {
@@ -39,7 +39,7 @@ abstract class AbstractTransformer implements Resolver
 
         if (0 === count($result)) {
             foreach ($keys as $key) {
-                $result[$key] = $this->transform($key);
+                $result[$key] = fn ($key) => $this->transform($key);
             }
         }
 
